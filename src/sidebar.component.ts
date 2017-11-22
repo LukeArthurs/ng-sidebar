@@ -8,7 +8,6 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
-  Optional,
   Output,
   SimpleChanges,
   ViewChild
@@ -135,18 +134,18 @@ export class Sidebar implements OnInit, OnChanges, OnDestroy {
   private _onClickOutsideAttached: boolean = false;
   private _onKeyDownAttached: boolean = false;
   private _onResizeAttached: boolean = false;
-
+  private _container: SidebarContainer;
   private _isBrowser: boolean;
 
-  constructor(@Optional() private _container: SidebarContainer, private _ref: ChangeDetectorRef) {
-    if (!this._container) {
-      throw new Error(
-        '<ng-sidebar> must be inside a <ng-sidebar-container>. ' +
-          'See https://github.com/arkon/ng-sidebar#usage for more info.'
-      );
+  @Input set container(container: SidebarContainer) {
+    if(container) {
+      this._container = container;
+      this._container._addSidebar(this);
     }
+  }
 
-    this._isBrowser = isBrowser();
+  constructor(private _ref: ChangeDetectorRef) {
+        this._isBrowser = isBrowser();
 
     // Handle taps in iOS
     if (this._isBrowser && isIOS() && 'ontouchstart' in window) {
@@ -174,7 +173,7 @@ export class Sidebar implements OnInit, OnChanges, OnDestroy {
       this.animate = false;
     }
 
-    this._container._addSidebar(this);
+    // this._container._addSidebar(this);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
