@@ -137,7 +137,7 @@ export class Sidebar implements OnInit, OnChanges, OnDestroy {
   private _container: SidebarContainer;
   private _isBrowser: boolean;
 
-  @Input set container(container: SidebarContainer) {
+  @Input() set container(container: SidebarContainer) {
     if(container) {
       this._container = container;
       this._container._addSidebar(this);
